@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+@theme {
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --color-cyan-glow: #00C8FF;
+  --color-dark-bg: #02060D;
+  --color-navy-card: #040B18;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-dark-bg);
+    color: #FFFFFF;
+    font-family: var(--font-inter);
+    overflow-x: hidden;
+  }
+
+  /* Custom glow scrollbar design */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #02060D;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 200, 255, 0.25);
+    border-radius: 9999px;
+    transition: background 0.3s ease;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 200, 255, 0.6);
+    box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+  }
+
+  /* Global keyboard focus indicators for accessibility (WCAG compliance) */
+  *:focus-visible {
+    outline: 2px dashed var(--color-cyan-glow) !important;
+    outline-offset: 3px !important;
+  }
+}
+
+/* Glassmorphism helpers — slightly dark for legibility over video background */
+.glass-panel {
+  background: rgba(3, 10, 24, 0.52);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 200, 255, 0.18);
+}
+
+.glass-panel-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(0, 12, 32, 0.65);
+  border-color: rgba(0, 200, 255, 0.40);
+  box-shadow: 0 0 28px rgba(0, 200, 255, 0.15);
+}
+
+/* Intersection observer animation reveal system */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Magnetic tilt CSS positioning */
+.card-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 200, 255, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+[data-tilt]:hover .card-glow {
+  opacity: 1;
+}
+
+/* Keyframe pulsating glows */
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 200, 255, 0.2), inset 0 0 5px rgba(0, 200, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.5), inset 0 0 10px rgba(0, 200, 255, 0.2);
+  }
+}
+
+.neon-glow-pulse {
+  animation: neonPulse 3s infinite ease-in-out;
+}
+
+/* Continuous vortex and float text animations */
+@keyframes continuousVortex {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  25% {
+    transform: translate(3px, -2px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 3px) rotate(-1deg);
+  }
+  75% {
+    transform: translate(-2px, -3px) rotate(0.5deg);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+}
+
+.animate-continuous-vortex {
+  animation: continuousVortex 6s infinite ease-in-out;
+}
+
+@keyframes continuousFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+.animate-continuous-float {
+  animation: continuousFloat 5s infinite ease-in-out;
+}
+
+/* Shimmer scan line effect for banners */
+@keyframes shimmerScan {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 200, 255, 0.15) 40%,
+    rgba(0, 200, 255, 0.25) 50%,
+    rgba(0, 200, 255, 0.15) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerScan 3s infinite linear;
+}
+
+/* Subtle upward float for hero elements */
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-up {
+  animation: floatUp 4s infinite ease-in-out;
+}
+
+/* Pulsing ring for active badges */
+@keyframes ringPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 200, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(0, 200, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 200, 255, 0);
+  }
+}
+
+.animate-ring-pulse {
+  animation: ringPulse 2.5s infinite;
+}
+
+/* Text gradient scan */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-flow {
+  background-size: 200% 200%;
+  animation: gradientFlow 4s ease infinite;
+}
+
+/* Card border glow pulse */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(0, 200, 255, 0.12);
+    box-shadow: 0 0 0px rgba(0, 200, 255, 0);
+  }
+  50% {
+    border-color: rgba(0, 200, 255, 0.35);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.12);
+  }
+}
+
+.animate-border-glow {
+  animation: borderGlow 4s infinite ease-in-out;
+}
