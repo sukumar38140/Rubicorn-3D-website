@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, MapPin, Clock, ChevronDown, ChevronUp, Zap, Users, Star, ArrowRight } from 'lucide-react';
-import { ScrollReveal } from '../ui/ScrollReveal';
+import { ContentEmergence } from '../ui/ContentEmergence';
 import { useFrameSequence } from '../../contexts/FrameSequenceProvider';
 import { JobOpening } from '../../types';
 
@@ -13,8 +13,6 @@ const perks = [
   { icon: '⚡', title: 'Fast-Track Growth', desc: 'High performers are fast-tracked to full-time roles within the team' },
   { icon: '🎯', title: 'Stipend Based', desc: 'Performance-linked monthly stipend for qualified candidates' },
 ];
-
-const perkAnimTypes = ['fadeLeft', 'scale', 'fadeRight', 'fadeLeft', 'scale', 'fadeRight'] as const;
 
 export const CareersSection: React.FC = () => {
   const { setSelectedJob } = useFrameSequence();
@@ -82,83 +80,65 @@ export const CareersSection: React.FC = () => {
 
       <div className="max-w-[1100px] w-full flex flex-col gap-20 relative z-10">
 
-        {/* Section Header — rotate entrance */}
-        <ScrollReveal type="rotate" className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
+        {/* Section Header — Content Emergence 3D launch */}
+        <ContentEmergence intensity="feature" delay={0} className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
           <div className="flex items-center gap-3">
-            <motion.div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60 w-12" />
             <span className="font-space-grotesk text-[0.7rem] tracking-[0.3em] text-[#00C8FF] uppercase">JOIN THE TEAM</span>
-            <motion.div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60 w-12" />
           </div>
 
-          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase">
+          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase text-center">
             BUILD THE FUTURE
             <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#00C8FF] to-[#0055FF]">
-              {'WITH US'.split('').map((ch, i) => (
-                <motion.span key={i} initial={{ opacity: 0, scale: 0, rotate: 20 }} whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.07, duration: 0.45, ease: 'backOut' }}
-                  className="inline-block">{ch === ' ' ? '\u00A0' : ch}
-                </motion.span>
-              ))}
+              WITH US
             </span>
           </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.8, duration: 0.6 }}
-            className="text-white/55 text-[0.95rem] leading-relaxed max-w-[600px]"
-          >
+          <p className="text-white/55 text-[0.95rem] leading-relaxed max-w-[600px]">
             We're building a team of relentlessly curious, high-output individuals. Work on cutting-edge technology while shaping digital futures.
-          </motion.p>
-        </ScrollReveal>
+          </p>
+        </ContentEmergence>
 
-        {/* Culture Stats — scale in with stagger */}
+        {/* Culture Stats — ContentEmergence with stagger */}
         <div className="grid grid-cols-3 gap-4 md:gap-6">
           {[
             { icon: <Users size={22} />, value: '15+', label: 'Team Members' },
             { icon: <Star size={22} />, value: '98%', label: 'Intern Satisfaction' },
             { icon: <Zap size={22} />, value: '72H', label: 'Onboarding Sprint' },
           ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.7, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.65, ease: 'backOut' }}
-              whileHover={{ y: -6, scale: 1.04, transition: { duration: 0.25 } }}
-              className="flex flex-col items-center gap-2 p-5 rounded-xl border border-white/[0.09] text-center relative overflow-hidden group cursor-default"
-              style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(10px)' }}
-            >
+            <ContentEmergence key={i} intensity="card" delay={i * 100} className="h-full">
               <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
-                style={{ background: 'radial-gradient(circle at center, rgba(0,200,255,0.07) 0%, transparent 70%)' }}
-              />
-              <motion.span
-                className="text-[#00C8FF] relative"
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.5 }}
+                whileHover={{ y: -6, scale: 1.04, transition: { duration: 0.25 } }}
+                className="flex flex-col items-center gap-2 p-5 rounded-xl border border-white/[0.09] text-center relative overflow-hidden group cursor-default h-full justify-center"
+                style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(10px)' }}
               >
-                {item.icon}
-              </motion.span>
-              <motion.div
-                className="font-orbitron font-extrabold text-[1.6rem] md:text-[2rem] text-white relative"
-                animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 15px rgba(0,200,255,0.35)', '0 0 0px rgba(0,200,255,0)'] }}
-                transition={{ duration: 3, repeat: Infinity, delay: i * 0.6 }}
-              >
-                {item.value}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+                  style={{ background: 'radial-gradient(circle at center, rgba(0,200,255,0.07) 0%, transparent 70%)' }}
+                />
+                <motion.span
+                  className="text-[#00C8FF] relative"
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.5 }}
+                >
+                  {item.icon}
+                </motion.span>
+                <motion.div
+                  className="font-orbitron font-extrabold text-[1.6rem] md:text-[2rem] text-white relative"
+                  animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 15px rgba(0,200,255,0.35)', '0 0 0px rgba(0,200,255,0)'] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.6 }}
+                >
+                  {item.value}
+                </motion.div>
+                <div className="font-space-grotesk text-[0.65rem] tracking-[0.2em] text-white/40 uppercase relative">{item.label}</div>
               </motion.div>
-              <div className="font-space-grotesk text-[0.65rem] tracking-[0.2em] text-white/40 uppercase relative">{item.label}</div>
-            </motion.div>
+            </ContentEmergence>
           ))}
         </div>
 
-        {/* Perks Grid — each perk has unique animation */}
-        <ScrollReveal type="flipX">
+        {/* Perks Grid — ContentEmergence */}
+        <ContentEmergence intensity="feature" delay={150}>
           <div
             className="rounded-2xl border border-[#00C8FF]/18 p-8 md:p-10"
             style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(12px)' }}
@@ -173,9 +153,9 @@ export const CareersSection: React.FC = () => {
             <h3 className="font-orbitron font-bold text-[1.2rem] md:text-[1.5rem] text-white mt-2 mb-8 uppercase">What You Gain</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {perks.map((perk, i) => (
-                <ScrollReveal key={i} delay={i * 70} type={perkAnimTypes[i]}>
+                <ContentEmergence key={i} delay={i * 70} intensity="secondary" className="h-full">
                   <motion.div
-                    className="flex items-start gap-3 p-4 rounded-lg border border-white/[0.07] hover:border-[#00C8FF]/25 transition-colors duration-300 group cursor-default"
+                    className="flex items-start gap-3 p-4 rounded-lg border border-white/[0.07] hover:border-[#00C8FF]/25 transition-colors duration-300 group cursor-default h-full"
                     style={{ background: 'rgba(3, 10, 24, 0.52)' }}
                     whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.25 } }}
                   >
@@ -191,15 +171,15 @@ export const CareersSection: React.FC = () => {
                       <div className="text-white/45 text-[0.78rem] leading-relaxed">{perk.desc}</div>
                     </div>
                   </motion.div>
-                </ScrollReveal>
+                </ContentEmergence>
               ))}
             </div>
           </div>
-        </ScrollReveal>
+        </ContentEmergence>
 
         {/* Job Listings */}
         <div className="flex flex-col gap-4">
-          <ScrollReveal type="fadeLeft">
+          <ContentEmergence intensity="secondary" delay={180}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-orbitron font-bold text-[1.1rem] text-white uppercase tracking-wide">Open Positions</h3>
               <motion.span
@@ -210,12 +190,12 @@ export const CareersSection: React.FC = () => {
                 {jobs.length} Open Roles
               </motion.span>
             </div>
-          </ScrollReveal>
+          </ContentEmergence>
 
           {jobs.map((job, index) => {
             const isExpanded = expandedJobId === job.id;
             return (
-              <ScrollReveal key={job.id} delay={index * 120} type={index === 0 ? 'fadeLeft' : 'fadeRight'}>
+              <ContentEmergence key={job.id} delay={200 + index * 100} intensity="card" className="w-full">
                 <motion.div
                   className={`rounded-xl transition-colors duration-500 ${isExpanded ? 'border-[#00C8FF]/35' : 'border-white/[0.08] hover:border-[#00C8FF]/22'}`}
                   style={{
@@ -238,120 +218,80 @@ export const CareersSection: React.FC = () => {
                           animate={{ boxShadow: ['0 0 0px rgba(0,200,255,0.5)', '0 0 10px rgba(0,200,255,1)', '0 0 0px rgba(0,200,255,0.5)'] }}
                           transition={{ duration: 1.8, repeat: Infinity }}
                         />
-                        <h3 className="font-orbitron font-bold text-[1.05rem] md:text-[1.2rem] text-white tracking-wide uppercase">
-                          {job.title}
-                        </h3>
+                        <h4 className="font-orbitron font-bold text-[0.95rem] md:text-[1.1rem] text-white uppercase tracking-wide">{job.title}</h4>
                       </div>
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-white/45 text-[0.75rem] font-space-grotesk tracking-wider">
-                        {[{ icon: <Briefcase size={13} />, text: job.department }, { icon: <MapPin size={13} />, text: job.location }, { icon: <Clock size={13} />, text: job.type }].map((meta, mi) => (
-                          <span key={mi} className="flex items-center gap-1.5">
-                            <span className="text-[#00C8FF]">{meta.icon}</span>{meta.text}
-                          </span>
-                        ))}
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-5">
+                        <span className="flex items-center gap-1.5 text-white/45 text-[0.72rem] uppercase">
+                          <Briefcase size={12} className="text-[#00C8FF]/80" /> {job.department}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-white/45 text-[0.72rem] uppercase">
+                          <MapPin size={12} className="text-[#00C8FF]/80" /> {job.location}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-white/45 text-[0.72rem] uppercase">
+                          <Clock size={12} className="text-[#00C8FF]/80" /> {job.type}
+                        </span>
                       </div>
                     </div>
                     <motion.div
-                      className={`p-2.5 rounded-lg border transition-all duration-300 ${isExpanded ? 'border-[#00C8FF]/40 text-[#00C8FF] bg-[#00C8FF]/10' : 'border-white/[0.08] text-white/40'}`}
+                      className="p-2 rounded-lg border border-white/10 text-white/40"
                       animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <ChevronDown size={18} />
+                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                     </motion.div>
                   </motion.div>
 
-                  {/* Expanded Content */}
+                  {/* Collapsible Content */}
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 md:px-8 pb-8 pt-2 border-t border-white/[0.04]">
-                          <div className="flex flex-col gap-6 mt-5">
-                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-                              <h4 className="font-orbitron text-[0.75rem] tracking-[0.2em] text-[#00C8FF] uppercase mb-3">ROLE OVERVIEW</h4>
-                              <p className="text-white/65 text-[0.88rem] leading-[1.8]">{job.description}</p>
-                            </motion.div>
-
-                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                              <h4 className="font-orbitron text-[0.75rem] tracking-[0.2em] text-[#00C8FF] uppercase mb-3">WHAT WE'RE LOOKING FOR</h4>
-                              <ul className="flex flex-col gap-2.5">
-                                {job.requirements.map((req, i) => (
-                                  <motion.li
-                                    key={i}
-                                    initial={{ opacity: 0, x: -12 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.25 + i * 0.09 }}
-                                    className="flex items-start gap-3 text-white/55 text-[0.85rem] leading-relaxed"
-                                  >
-                                    <motion.span
-                                      className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#00C8FF] shrink-0"
-                                      animate={{ scale: [1, 1.4, 1] }}
-                                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                                    />
-                                    {req}
-                                  </motion.li>
-                                ))}
-                              </ul>
-                            </motion.div>
-
-                            <motion.div
-                              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                              className="flex flex-col sm:flex-row gap-3 mt-2 pt-4 border-t border-white/[0.04]"
-                            >
-                              <motion.button
-                                onClick={() => handleApplyNow(job.title)}
-                                className="group px-6 py-3.5 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#0055FF] text-white font-space-grotesk text-[0.8rem] tracking-[0.15em] uppercase font-semibold flex items-center gap-2"
-                                whileHover={{ scale: 1.03, boxShadow: '0 0 20px rgba(0,200,255,0.4)' }}
-                                whileTap={{ scale: 0.97 }}
-                              >
-                                Apply for Role
-                                <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                                  <ArrowRight size={14} />
-                                </motion.span>
-                              </motion.button>
-                            </motion.div>
+                        <div className="px-6 pb-8 md:px-8 md:pb-10 pt-2 border-t border-white/[0.04] flex flex-col gap-6">
+                          <div className="flex flex-col gap-2">
+                            <h5 className="font-orbitron font-bold text-[0.8rem] text-white/70 uppercase tracking-wider">Role Overview</h5>
+                            <p className="text-white/50 text-[0.82rem] leading-relaxed max-w-[800px]">{job.description}</p>
                           </div>
+
+                          <div className="flex flex-col gap-3">
+                            <h5 className="font-orbitron font-bold text-[0.8rem] text-white/70 uppercase tracking-wider">Key Requirements</h5>
+                            <ul className="flex flex-col gap-2 pl-1">
+                              {job.requirements.map((req, rIdx) => (
+                                <motion.li
+                                  key={rIdx}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: rIdx * 0.08, duration: 0.35 }}
+                                  className="flex items-start gap-2.5"
+                                >
+                                  <span className="text-[#00C8FF] mt-1 shrink-0">•</span>
+                                  <span className="text-white/45 text-[0.8rem] leading-relaxed">{req}</span>
+                                </motion.li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <motion.button
+                            onClick={() => handleApplyNow(job.dataJob)}
+                            className="mt-2 w-fit px-6 py-3 rounded bg-[#00C8FF]/10 hover:bg-gradient-to-r hover:from-[#00C8FF] hover:to-[#0055FF] border border-[#00C8FF]/30 hover:border-transparent text-white font-space-grotesk text-[0.75rem] tracking-[0.15em] uppercase font-semibold flex items-center gap-2 hover:shadow-[0_0_20px_rgba(0,200,255,0.35)] transition-all duration-300"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            Apply For This Position <ArrowRight size={14} />
+                          </motion.button>
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </motion.div>
-              </ScrollReveal>
+              </ContentEmergence>
             );
           })}
         </div>
-
-        {/* General Application CTA */}
-        <ScrollReveal type="scale">
-          <motion.div
-            className="text-center p-8 rounded-xl border border-dashed hover:border-[#00C8FF]/30 transition-colors duration-500"
-            style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-            whileHover={{ scale: 1.01, transition: { duration: 0.3 } }}
-          >
-            <motion.p
-              className="text-white/40 text-[0.88rem] mb-3"
-              animate={{ opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              Don't see a role that fits? We still want to hear from you.
-            </motion.p>
-            <motion.a
-              href="/contact"
-              className="inline-flex items-center gap-2 text-[#00C8FF] font-space-grotesk text-[0.8rem] tracking-[0.15em] uppercase"
-              whileHover={{ gap: '12px', x: 3 }}
-              transition={{ duration: 0.3 }}
-            >
-              Send a General Application
-              <motion.span animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                <ArrowRight size={14} />
-              </motion.span>
-            </motion.a>
-          </motion.div>
-        </ScrollReveal>
 
       </div>
     </section>

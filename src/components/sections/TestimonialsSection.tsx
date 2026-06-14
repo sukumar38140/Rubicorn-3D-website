@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight, Play } from 'lucide-react';
-import { ScrollReveal } from '../ui/ScrollReveal';
+import { ContentEmergence } from '../ui/ContentEmergence';
 
 interface Review {
   name: string;
@@ -87,43 +87,28 @@ export const TestimonialsSection: React.FC = () => {
 
       <div className="max-w-[1200px] w-full flex flex-col gap-16 md:gap-20 relative z-10">
 
-        {/* Section Header — fadeDown with char animation */}
-        <ScrollReveal type="fadeDown" className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
+        {/* Section Header — Content Emergence 3D launch */}
+        <ContentEmergence intensity="feature" delay={0} className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
           <div className="flex items-center gap-3">
-            <motion.div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60 w-12" />
             <span className="font-space-grotesk text-[0.7rem] tracking-[0.3em] text-[#00C8FF] uppercase">CLIENT FEEDBACK</span>
-            <motion.div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60 w-12" />
           </div>
 
-          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase">
+          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase text-center">
             DELIVERING
             <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#00C8FF] to-[#0055FF]">
-              {'PROVEN IMPACT'.split('').map((ch, i) => (
-                <motion.span key={i} initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.04, duration: 0.45 }}
-                  className="inline-block">{ch === ' ' ? '\u00A0' : ch}
-                </motion.span>
-              ))}
+              PROVEN IMPACT
             </span>
           </h2>
 
-          <motion.p
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-            viewport={{ once: true }} transition={{ delay: 0.9, duration: 0.7 }}
-            className="text-white/55 text-[0.95rem] leading-relaxed max-w-[600px]"
-          >
+          <p className="text-white/55 text-[0.95rem] leading-relaxed max-w-[600px]">
             Real metrics. Real transformations. Hear from the leaders and founders who trusted Rubicorn.
-          </motion.p>
-        </ScrollReveal>
+          </p>
+        </ContentEmergence>
 
-        {/* Featured Testimonial Carousel — scale entrance */}
-        <ScrollReveal type="scale">
+        {/* Featured Testimonial Carousel — ContentEmergence */}
+        <ContentEmergence intensity="feature" delay={100}>
           <div className="relative rounded-2xl border border-[#00C8FF]/14 overflow-hidden">
             {/* Top gradient accent */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00C8FF]/40 to-transparent" />
@@ -240,14 +225,14 @@ export const TestimonialsSection: React.FC = () => {
               </div>
             </div>
           </div>
-        </ScrollReveal>
+        </ContentEmergence>
 
         {/* Mini review cards — alternating directions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {reviews.slice(0, 3).map((rev, index) => (
-            <ScrollReveal key={rev.name} delay={index * 100} type={index === 0 ? 'fadeLeft' : index === 1 ? 'scale' : 'fadeRight'}>
+            <ContentEmergence key={rev.name} delay={index * 80} intensity="card" className="h-full">
               <motion.div
-                className={`p-5 rounded-xl border cursor-pointer transition-colors duration-400 ${activeIndex === index ? 'border-[#00C8FF]/35' : 'border-white/[0.08] hover:border-white/15'}`}
+                className={`p-5 rounded-xl border cursor-pointer transition-colors duration-400 h-full ${activeIndex === index ? 'border-[#00C8FF]/35' : 'border-white/[0.08] hover:border-white/15'}`}
                 style={{ background: activeIndex === index ? 'rgba(0,200,255,0.05)' : 'rgba(3, 10, 24, 0.50)' }}
                 onClick={() => { setActiveIndex(index); setIsAutoPlaying(false); }}
                 whileHover={{ y: -5, scale: 1.02 }}
@@ -267,7 +252,7 @@ export const TestimonialsSection: React.FC = () => {
                   <span className="text-[#00C8FF] text-[0.65rem] uppercase font-space-grotesk tracking-wider mt-0.5">{rev.company}</span>
                 </div>
               </motion.div>
-            </ScrollReveal>
+            </ContentEmergence>
           ))}
         </div>
 

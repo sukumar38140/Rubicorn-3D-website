@@ -9,6 +9,7 @@ const pageCurlVariants = {
     rotateY: 45,
     skewY: 6,
     x: "30%",
+    z: 150,
     transformOrigin: "left center",
     clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)"
   },
@@ -17,10 +18,11 @@ const pageCurlVariants = {
     rotateY: 0,
     skewY: 0,
     x: 0,
+    z: 0,
     transformOrigin: "left center",
     clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
     transition: {
-      duration: 0.85,
+      duration: 1.15,
       ease: [0.16, 1, 0.3, 1]
     }
   },
@@ -29,10 +31,11 @@ const pageCurlVariants = {
     rotateY: -45,
     skewY: -6,
     x: "-30%",
+    z: -150,
     transformOrigin: "right center",
     clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)",
     transition: {
-      duration: 0.75,
+      duration: 0.95,
       ease: [0.16, 1, 0.3, 1]
     }
   }

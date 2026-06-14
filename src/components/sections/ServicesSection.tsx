@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Brain, LayoutGrid, ShieldAlert, Workflow, Palette, TrendingUp, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { ScrollReveal } from '../ui/ScrollReveal';
+import { ContentEmergence } from '../ui/ContentEmergence';
 
 interface Service {
   icon: React.ReactNode;
@@ -10,7 +10,6 @@ interface Service {
   description: string;
   bullets: string[];
   color: string;
-  animType: 'fadeLeft' | 'fadeRight' | 'scale' | 'flipY' | 'rotate' | 'blur';
 }
 
 export const ServicesSection: React.FC = () => {
@@ -27,7 +26,6 @@ export const ServicesSection: React.FC = () => {
       description: 'Custom machine learning models, natural language processing, predictive analysis, and intelligent automated workflows tailored for your operations.',
       bullets: ['Custom ML model training & deployment', 'NLP chatbots & voice assistants', 'Computer vision & image recognition', 'Predictive analytics dashboards'],
       color: '#00C8FF',
-      animType: 'fadeLeft',
     },
     {
       icon: <LayoutGrid className="w-7 h-7" />,
@@ -36,7 +34,6 @@ export const ServicesSection: React.FC = () => {
       description: 'High-performance React/Vite frontends, secure APIs, and responsive iOS/Android mobile apps engineered for speed and conversion.',
       bullets: ['React, Next.js & Vite frontends', 'Node.js & Python backend APIs', 'iOS & Android mobile apps', 'Progressive Web Apps (PWA)'],
       color: '#7C3AED',
-      animType: 'scale',
     },
     {
       icon: <ShieldAlert className="w-7 h-7" />,
@@ -45,7 +42,6 @@ export const ServicesSection: React.FC = () => {
       description: 'Secure serverless setups, AWS/GCP architecture design, identity management, and comprehensive software vulnerability compliance auditing.',
       bullets: ['Penetration testing & audits', 'AWS / GCP cloud architecture', 'Identity & access management', 'Compliance & vulnerability scans'],
       color: '#10B981',
-      animType: 'fadeRight',
     },
     {
       icon: <Workflow className="w-7 h-7" />,
@@ -54,7 +50,6 @@ export const ServicesSection: React.FC = () => {
       description: 'Streamline business operations with custom management portals, database integrations, and legacy systems synchronization.',
       bullets: ['Custom ERP / CRM portals', 'Workflow automation engines', 'Legacy system migrations', 'Third-party API integrations'],
       color: '#F59E0B',
-      animType: 'flipY',
     },
     {
       icon: <Palette className="w-7 h-7" />,
@@ -63,7 +58,6 @@ export const ServicesSection: React.FC = () => {
       description: 'Complete logo design systems, UI design kits, interactive mockups, and corporate brand alignments that stand out in crowded markets.',
       bullets: ['Logo & visual identity systems', 'UI component design kits', 'Interactive Figma prototypes', 'Motion & interaction design'],
       color: '#EC4899',
-      animType: 'rotate',
     },
     {
       icon: <TrendingUp className="w-7 h-7" />,
@@ -72,7 +66,6 @@ export const ServicesSection: React.FC = () => {
       description: 'Conversion rate optimization, custom tracking dashboards, search engine optimization, and targeted marketing strategy.',
       bullets: ['SEO & content optimization', 'CRO & A/B testing strategy', 'Custom analytics dashboards', 'Performance ad management'],
       color: '#F97316',
-      animType: 'blur',
     }
   ];
 
@@ -100,45 +93,30 @@ export const ServicesSection: React.FC = () => {
 
       <div className="max-w-[1400px] w-full flex flex-col gap-20 relative z-10">
 
-        {/* Section Header — blur reveal with character animation */}
-        <ScrollReveal type="blur" className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
+        {/* Section Header — Content Emergence 3D launch */}
+        <ContentEmergence intensity="feature" delay={0} className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
           <div className="flex items-center gap-3">
-            <motion.div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-r from-transparent to-[#00C8FF]/60 w-12" />
             <span className="font-space-grotesk text-[0.7rem] tracking-[0.3em] text-[#00C8FF] uppercase">OUR CAPABILITIES</span>
-            <motion.div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60"
-              initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            />
+            <div className="h-[1px] bg-gradient-to-l from-transparent to-[#00C8FF]/60 w-12" />
           </div>
 
-          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase">
+          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase text-center">
             INTELLIGENT SOLUTION
             <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#00C8FF] to-[#0055FF]">
-              {'ENGINEERING'.split('').map((ch, i) => (
-                <motion.span key={i} initial={{ opacity: 0, rotateY: 90 }} whileInView={{ opacity: 1, rotateY: 0 }}
-                  viewport={{ once: true }} transition={{ delay: 0.4 + i * 0.04, duration: 0.5 }}
-                  className="inline-block">{ch}
-                </motion.span>
-              ))}
+              ENGINEERING
             </span>
           </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.9, duration: 0.6 }}
-            className="text-white/55 text-[0.95rem] leading-relaxed max-w-[640px]"
-          >
+          <p className="text-white/55 text-[0.95rem] leading-relaxed max-w-[640px]">
             Six engineering disciplines. One unified team. We cover the complete digital product lifecycle — from intelligent architecture to high-conversion interfaces.
-          </motion.p>
-        </ScrollReveal>
+          </p>
+        </ContentEmergence>
 
-        {/* Services Grid — each card has a unique animation type */}
+        {/* Services Grid — each card has ContentEmergence animation */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
           {services.map((service, index) => (
-            <ScrollReveal key={service.title} delay={index * 90} type={service.animType}>
+            <ContentEmergence key={service.title} delay={index * 90} intensity="card" className="h-full">
               <motion.div
                 className="relative rounded-xl cursor-pointer overflow-hidden group h-full"
                 style={{ border: `1px solid rgba(255,255,255,0.08)`, background: 'rgba(3, 10, 24, 0.52)' }}
@@ -239,12 +217,12 @@ export const ServicesSection: React.FC = () => {
                   </motion.button>
                 </div>
               </motion.div>
-            </ScrollReveal>
+            </ContentEmergence>
           ))}
         </div>
 
-        {/* CTA Banner — scale entrance */}
-        <ScrollReveal type="scale">
+        {/* CTA Banner — ContentEmergence */}
+        <ContentEmergence intensity="feature" delay={150}>
           <motion.div
             className="rounded-2xl border border-[#00C8FF]/18 p-8 md:p-12 flex flex-col md:flex-row items-center gap-6 justify-between relative overflow-hidden"
             style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(12px)' }}
@@ -274,7 +252,7 @@ export const ServicesSection: React.FC = () => {
               Start A Conversation <ArrowRight size={16} />
             </motion.a>
           </motion.div>
-        </ScrollReveal>
+        </ContentEmergence>
 
       </div>
     </section>

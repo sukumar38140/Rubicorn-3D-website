@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Cpu, Eye, ShieldCheck, Zap, Globe, Award, TrendingUp, Users } from 'lucide-react';
-import { ScrollReveal } from '../ui/ScrollReveal';
+import { ContentEmergence } from '../ui/ContentEmergence';
 import { TiltCard } from '../ui/TiltCard';
 
-/* ─── Animated Counter ─── */
+/* ─── Animated Counter Hook ─── */
 const useCounter = (target: number, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -21,14 +21,11 @@ const useCounter = (target: number, duration = 2000, start = false) => {
   return count;
 };
 
-/* ─── Stat Card ─── */
+/* ─── Stat Card Component ─── */
 const StatCard: React.FC<{ icon: React.ReactNode; value: number; suffix: string; label: string; index: number }> = ({ icon, value, suffix, label, index }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const count = useCounter(value, 2200, visible);
-
-  // Alternating entrance: even = from left, odd = from right
-  const enterX = index % 2 === 0 ? -50 : 50;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,39 +37,41 @@ const StatCard: React.FC<{ icon: React.ReactNode; value: number; suffix: string;
   }, []);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: enterX, scale: 0.85 }}
-      whileInView={{ opacity: 1, x: 0, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.75, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -6, scale: 1.04, transition: { duration: 0.3 } }}
-      className="flex flex-col items-center gap-3 p-6 rounded-xl border border-white/[0.09] group text-center cursor-default relative overflow-hidden"
-      style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(10px)' }}
+    <ContentEmergence
+      intensity="card"
+      delay={index * 100}
+      className="h-full"
     >
-      {/* Shimmer sweep on hover */}
       <motion.div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-        style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(0,200,255,0.07) 50%, transparent 70%)', backgroundSize: '200% 100%' }}
-        animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-      />
-      <motion.div
-        className="text-[#00C8FF]"
-        animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 3.5, repeat: Infinity, delay: index * 0.5, ease: 'easeInOut' }}
+        ref={ref}
+        whileHover={{ y: -6, scale: 1.04, transition: { duration: 0.3 } }}
+        className="flex flex-col items-center gap-3 p-6 rounded-xl border border-white/[0.09] group text-center cursor-default relative overflow-hidden h-full"
+        style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(10px)' }}
       >
-        {icon}
+        {/* Shimmer sweep on hover */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
+          style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(0,200,255,0.07) 50%, transparent 70%)', backgroundSize: '200% 100%' }}
+          animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+        />
+        <motion.div
+          className="text-[#00C8FF]"
+          animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 3.5, repeat: Infinity, delay: index * 0.5, ease: 'easeInOut' }}
+        >
+          {icon}
+        </motion.div>
+        <motion.div
+          className="font-orbitron font-extrabold text-[2.2rem] md:text-[2.8rem] text-white leading-none"
+          animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 20px rgba(0,200,255,0.4)', '0 0 0px rgba(0,200,255,0)'] }}
+          transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
+        >
+          {count}{suffix}
+        </motion.div>
+        <div className="font-space-grotesk text-[0.75rem] tracking-[0.2em] text-white/40 uppercase">{label}</div>
       </motion.div>
-      <motion.div
-        className="font-orbitron font-extrabold text-[2.2rem] md:text-[2.8rem] text-white leading-none"
-        animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 20px rgba(0,200,255,0.4)', '0 0 0px rgba(0,200,255,0)'] }}
-        transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
-      >
-        {count}{suffix}
-      </motion.div>
-      <div className="font-space-grotesk text-[0.75rem] tracking-[0.2em] text-white/40 uppercase">{label}</div>
-    </motion.div>
+    </ContentEmergence>
   );
 };
 
@@ -108,7 +107,6 @@ export const WhyChooseRubicorn: React.FC = () => {
       description: 'We develop intelligent systems, custom AI integrations, and automated pipelines that optimize workflows, eliminate redundancies, and scale businesses far beyond legacy capabilities.',
       highlights: ['AI-First Architecture', 'Zero-Redundancy Design', 'Infinite Scalability'],
       accentColor: '#00C8FF',
-      animType: 'fadeLeft' as const,
     },
     {
       icon: <Eye className="w-8 h-8 text-[#00C8FF] drop-shadow-[0_0_8px_rgba(0,200,255,0.4)]" />,
@@ -116,7 +114,6 @@ export const WhyChooseRubicorn: React.FC = () => {
       description: 'Our interfaces are built to captivate. We design premium, motion-driven frontends that load instantaneously, scroll fluidly, and convert visitors into loyal customers.',
       highlights: ['Sub-100ms Interactions', 'Motion-Driven Design', 'Conversion Optimized'],
       accentColor: '#00C8FF',
-      animType: 'scale' as const,
     },
     {
       icon: <ShieldCheck className="w-8 h-8 text-[#00C8FF] drop-shadow-[0_0_8px_rgba(0,200,255,0.4)]" />,
@@ -124,7 +121,6 @@ export const WhyChooseRubicorn: React.FC = () => {
       description: 'From secure CRM/ERP integrations to high-availability cloud architecture, we build resilient, secure solutions verified by compliance protocols and industry standards.',
       highlights: ['SOC 2 Compliant', 'High Availability SLA', 'Zero-Trust Security'],
       accentColor: '#00C8FF',
-      animType: 'fadeRight' as const,
     }
   ];
 
@@ -169,56 +165,38 @@ export const WhyChooseRubicorn: React.FC = () => {
 
       <div className="max-w-[1400px] w-full flex flex-col gap-20 md:gap-28 relative z-10">
 
-        {/* Section Header — blur reveal */}
-        <ScrollReveal type="blur" className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
-          <motion.div
-            className="flex items-center gap-3"
-            initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
+        {/* Section Header — Content Emergence 3D launch */}
+        <ContentEmergence intensity="feature" delay={0} className="flex flex-col items-center text-center gap-5 max-w-[800px] mx-auto">
+          <div className="flex items-center gap-3">
             <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#00C8FF]/60" />
             <span className="font-space-grotesk text-[0.7rem] tracking-[0.3em] text-[#00C8FF] uppercase">WHY RUBICORN</span>
             <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#00C8FF]/60" />
-          </motion.div>
+          </div>
 
-          {/* Character-split heading animation */}
-          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase">
-            {'ENGINEERING THE'.split('').map((ch, i) => (
-              <motion.span key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: 0.02 * i, duration: 0.4 }}
-                className="inline-block">{ch === ' ' ? '\u00A0' : ch}
-              </motion.span>
-            ))}
+          {/* Clean header layout */}
+          <h2 className="font-orbitron font-extrabold text-[2rem] md:text-[3.2rem] text-white leading-[1.15] uppercase text-center">
+            ENGINEERING THE{' '}
             <span className="block bg-clip-text text-transparent bg-gradient-to-r from-[#00C8FF] via-white to-[#0055FF]">
-              {'DIGITAL ADVANTAGE'.split('').map((ch, i) => (
-                <motion.span key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }} transition={{ delay: 0.4 + 0.025 * i, duration: 0.4 }}
-                  className="inline-block">{ch === ' ' ? '\u00A0' : ch}
-                </motion.span>
-              ))}
+              DIGITAL ADVANTAGE
             </span>
           </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.8, duration: 0.7 }}
-            className="text-white/55 text-[0.95rem] leading-relaxed max-w-[640px]"
-          >
+          <p className="text-white/55 text-[0.95rem] leading-relaxed max-w-[640px]">
             We bypass generic templates to build high-performance, custom-crafted digital solutions that define the next era of technological progress. Every line of code is intentional.
-          </motion.p>
-        </ScrollReveal>
+          </p>
+        </ContentEmergence>
 
-        {/* Stats — alternating left/right entrance */}
+        {/* Stats — Staggered Content Emergence */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {stats.map((stat, i) => (
             <StatCard key={stat.label} {...stat} index={i} />
           ))}
         </div>
 
-        {/* Feature Cards — three different entrance types */}
+        {/* Feature Cards — Staggered Content Emergence */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feat, index) => (
-            <ScrollReveal key={feat.title} delay={index * 120} type={feat.animType}>
+            <ContentEmergence key={feat.title} intensity="card" delay={index * 120} className="h-full">
               <motion.div
                 whileHover={{ y: -8, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
                 className="h-full"
@@ -253,7 +231,8 @@ export const WhyChooseRubicorn: React.FC = () => {
 
                   <motion.div
                     className="flex flex-col gap-2 pt-4 border-t border-white/[0.06]"
-                    initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5 + index * 0.15 }}
                   >
@@ -263,12 +242,12 @@ export const WhyChooseRubicorn: React.FC = () => {
                   </motion.div>
                 </TiltCard>
               </motion.div>
-            </ScrollReveal>
+            </ContentEmergence>
           ))}
         </div>
 
-        {/* Differentiators Banner — flipX entrance */}
-        <ScrollReveal type="flipX">
+        {/* Differentiators Banner — Content Emergence */}
+        <ContentEmergence intensity="feature" delay={150}>
           <div
             className="rounded-2xl border border-[#00C8FF]/18 p-8 md:p-12"
             style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(12px)' }}
@@ -311,7 +290,7 @@ export const WhyChooseRubicorn: React.FC = () => {
               </div>
             </div>
           </div>
-        </ScrollReveal>
+        </ContentEmergence>
 
       </div>
     </section>
