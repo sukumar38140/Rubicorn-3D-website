@@ -58,8 +58,8 @@ export const FrameSequenceProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(false);
   };
 
-  // Preloading parameters (Wait for first 30 frames to load before releasing preloader)
-  const initialPreloadCount = Math.min(30, totalFrames);
+  // Preloading parameters (Wait for first 5 frames to load before releasing preloader for instant entry)
+  const initialPreloadCount = Math.min(5, totalFrames);
 
   useEffect(() => {
     let active = true;

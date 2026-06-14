@@ -6,12 +6,12 @@ export const FramePreloader: React.FC = () => {
   const { isLoading, preloadProgress, skipPreloader } = useFrameSequence();
   const [showSkipButton, setShowSkipButton] = useState(false);
 
-  // Trigger skip button fallback visibility after 2.5 seconds of loading
+  // Trigger skip button fallback visibility after 1.5 seconds of loading
   useEffect(() => {
     if (isLoading) {
       const timer = setTimeout(() => {
         setShowSkipButton(true);
-      }, 2500);
+      }, 1500);
       return () => clearTimeout(timer);
     } else {
       setShowSkipButton(false);

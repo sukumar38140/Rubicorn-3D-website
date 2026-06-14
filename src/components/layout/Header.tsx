@@ -51,15 +51,15 @@ export const Header: React.FC = () => {
             : 'bg-transparent border-transparent py-6'
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-8 flex justify-between items-center gap-8">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 flex justify-between items-center gap-4 sm:gap-8">
           {/* Logo brand container linking to Home root */}
-          <Link to="/" className="flex items-center gap-3 text-white font-orbitron font-black text-[1.15rem] tracking-[0.1em] z-50 shrink-0">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 text-white font-orbitron font-black text-[1.15rem] tracking-[0.1em] z-50 shrink-0">
             <img
               src="/assets/logos/Rubicorn High Quality Logo.webp"
               alt="Rubicorn logo header"
               className="h-[36px] w-auto filter drop-shadow-[0_0_8px_rgba(0,200,255,0.3)]"
             />
-            <span className="hidden sm:inline bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-[#00C8FF]/70">
+            <span className="inline bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-[#00C8FF]/70 text-[0.8rem] sm:text-[1.15rem]">
               RUBICORN TECHNOLOGIES
             </span>
           </Link>
