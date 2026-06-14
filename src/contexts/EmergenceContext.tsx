@@ -63,7 +63,6 @@ export const EmergenceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         ...emergencesRef.current[id],
         ...updates,
       };
-      window.dispatchEvent(new CustomEvent('emergence-render-needed'));
     }
   }, []);
 

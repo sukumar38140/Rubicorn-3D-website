@@ -75,6 +75,12 @@ export const ContentEmergence: React.FC<ContentEmergenceProps> = ({
   useEffect(() => {
     if (!isInView || animationFinishedRef.current) return;
 
+    // On mobile, bypass canvas telemetry coordinate tracking loop entirely to save layout checks
+    if (isMobile) {
+      animationFinishedRef.current = true;
+      return;
+    }
+
     registerEmergence(uniqueId, intensityVal);
 
     const startTime = performance.now() + delay;

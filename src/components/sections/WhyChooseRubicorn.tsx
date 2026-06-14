@@ -1,40 +1,49 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Cpu, Eye, ShieldCheck, Zap, Globe, Award, TrendingUp, Users } from 'lucide-react';
 import { ContentEmergence } from '../ui/ContentEmergence';
 import { TiltCard } from '../ui/TiltCard';
-
-/* ─── Animated Counter Hook ─── */
-const useCounter = (target: number, duration = 2000, start = false) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime: number | null = null;
-    const step = (ts: number) => {
-      if (!startTime) startTime = ts;
-      const p = Math.min((ts - startTime) / duration, 1);
-      setCount(Math.floor((1 - Math.pow(1 - p, 3)) * target));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [start, target, duration]);
-  return count;
-};
+import { useFrameSequence } from '../../contexts/FrameSequenceProvider';
 
 /* ─── Stat Card Component ─── */
 const StatCard: React.FC<{ icon: React.ReactNode; value: number; suffix: string; label: string; index: number }> = ({ icon, value, suffix, label, index }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const count = useCounter(value, 2200, visible);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const countRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.4 }
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+
+          let startTime: number | null = null;
+          const duration = 2200;
+
+          const step = (ts: number) => {
+            if (!startTime) startTime = ts;
+            const p = Math.min((ts - startTime) / duration, 1);
+            const currentVal = Math.floor((1 - Math.pow(1 - p, 3)) * value);
+
+            if (countRef.current) {
+              countRef.current.textContent = String(currentVal);
+            }
+
+            if (p < 1) {
+              requestAnimationFrame(step);
+            }
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.2 }
     );
-    if (ref.current) observer.observe(ref.current);
+
+    observer.observe(card);
     return () => observer.disconnect();
-  }, []);
+  }, [value]);
 
   return (
     <ContentEmergence
@@ -43,32 +52,19 @@ const StatCard: React.FC<{ icon: React.ReactNode; value: number; suffix: string;
       className="h-full"
     >
       <motion.div
-        ref={ref}
+        ref={cardRef}
         whileHover={{ y: -6, scale: 1.04, transition: { duration: 0.3 } }}
         className="flex flex-col items-center gap-3 p-6 rounded-xl border border-white/[0.09] group text-center cursor-default relative overflow-hidden h-full"
         style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(10px)' }}
       >
-        {/* Shimmer sweep on hover */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-          style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(0,200,255,0.07) 50%, transparent 70%)', backgroundSize: '200% 100%' }}
-          animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="text-[#00C8FF]"
-          animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.15, 1] }}
-          transition={{ duration: 3.5, repeat: Infinity, delay: index * 0.5, ease: 'easeInOut' }}
-        >
+        {/* Shimmer sweep on hover (delegated to GPU-accelerated CSS) */}
+        <div className="shimmer-hover-effect" />
+        <div className="text-[#00C8FF]">
           {icon}
-        </motion.div>
-        <motion.div
-          className="font-orbitron font-extrabold text-[2.2rem] md:text-[2.8rem] text-white leading-none"
-          animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 20px rgba(0,200,255,0.4)', '0 0 0px rgba(0,200,255,0)'] }}
-          transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
-        >
-          {count}{suffix}
-        </motion.div>
+        </div>
+        <div className="font-orbitron font-extrabold text-[2.2rem] md:text-[2.8rem] text-white leading-none">
+          <span ref={countRef}>0</span>{suffix}
+        </div>
         <div className="font-space-grotesk text-[0.75rem] tracking-[0.2em] text-white/40 uppercase">{label}</div>
       </motion.div>
     </ContentEmergence>
@@ -85,19 +81,16 @@ const HighlightItem: React.FC<{ text: string; index: number }> = ({ text, index 
     whileHover={{ x: 4, transition: { duration: 0.2 } }}
     className="flex items-center gap-2 group cursor-default"
   >
-    <motion.span
-      className="w-1.5 h-1.5 rounded-full bg-[#00C8FF] shrink-0"
-      animate={{ boxShadow: ['0 0 0px rgba(0,200,255,0.4)', '0 0 8px rgba(0,200,255,0.9)', '0 0 0px rgba(0,200,255,0.4)'] }}
-      transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
-    />
+    <span className="w-1.5 h-1.5 rounded-full bg-[#00C8FF] shrink-0 shadow-[0_0_6px_rgba(0,200,255,0.7)]" />
     <span className="text-[#00C8FF] text-[0.75rem] font-space-grotesk tracking-wider group-hover:text-white transition-colors duration-300">{text}</span>
   </motion.div>
 );
 
 export const WhyChooseRubicorn: React.FC = () => {
+  const { isMobile } = useFrameSequence();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%']);
+  const bgY = useTransform(scrollYProgress, [0, 1], isMobile ? ['0%', '0%'] : ['-6%', '6%']);
   const bgOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.01, 0.03, 0.03, 0.01]);
 
   const features = [
@@ -155,11 +148,9 @@ export const WhyChooseRubicorn: React.FC = () => {
         className="absolute inset-0 pointer-events-none"
       />
 
-      {/* Ambient orb */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
-        animate={{ scale: [1, 1.15, 1], opacity: [0.025, 0.05, 0.025] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Ambient orb (delegated to GPU-accelerated CSS and hidden on mobile) */}
+      <div
+        className="bg-ambient-orb animate-orb-float w-[700px] h-[700px] left-1/2 top-1/2"
         style={{ background: 'radial-gradient(circle, rgba(0,200,255,0.3) 0%, transparent 70%)' }}
       />
 
@@ -211,12 +202,9 @@ export const WhyChooseRubicorn: React.FC = () => {
                     transition={{ duration: 1.2, delay: 0.3 + index * 0.15, ease: [0.16, 1, 0.3, 1] }}
                   />
 
-                  {/* Icon with continuous spin glow */}
+                  {/* Icon with static glow border */}
                   <motion.div
-                    className="mb-6 w-fit p-3.5 rounded-lg border relative"
-                    style={{ background: 'rgba(0,200,255,0.06)', borderColor: 'rgba(0,200,255,0.2)' }}
-                    animate={{ boxShadow: ['inset 0 0 8px rgba(0,200,255,0.05)', 'inset 0 0 20px rgba(0,200,255,0.2)', 'inset 0 0 8px rgba(0,200,255,0.05)'] }}
-                    transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.5 }}
+                    className="mb-6 w-fit p-3.5 rounded-lg border border-[#00C8FF]/20 bg-[#00C8FF]/5"
                     whileHover={{ scale: 1.1, rotate: 5, transition: { duration: 0.25 } }}
                   >
                     {feat.icon}
@@ -277,13 +265,9 @@ export const WhyChooseRubicorn: React.FC = () => {
                     className="flex items-start gap-3 p-4 rounded-lg border border-white/[0.07] hover:border-[#00C8FF]/30 transition-colors duration-300 cursor-default"
                     style={{ background: 'rgba(3, 10, 24, 0.52)' }}
                   >
-                    <motion.span
-                      className="text-[#00C8FF] mt-0.5 shrink-0"
-                      animate={{ rotate: [0, 15, -5, 0] }}
-                      transition={{ duration: 4, repeat: Infinity, delay: i * 0.7 }}
-                    >
+                    <span className="text-[#00C8FF] mt-0.5 shrink-0">
                       {item.icon}
-                    </motion.span>
+                    </span>
                     <span className="text-white/65 text-[0.85rem] leading-relaxed">{item.text}</span>
                   </motion.div>
                 ))}

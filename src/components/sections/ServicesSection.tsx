@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Brain, LayoutGrid, ShieldAlert, Workflow, Palette, TrendingUp, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { ContentEmergence } from '../ui/ContentEmergence';
+import { useFrameSequence } from '../../contexts/FrameSequenceProvider';
 
 interface Service {
   icon: React.ReactNode;
@@ -13,10 +14,11 @@ interface Service {
 }
 
 export const ServicesSection: React.FC = () => {
+  const { isMobile } = useFrameSequence();
   const [activeService, setActiveService] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
+  const parallaxY = useTransform(scrollYProgress, [0, 1], isMobile ? ['0%', '0%'] : ['0%', '8%']);
 
   const services: Service[] = [
     {
@@ -75,21 +77,9 @@ export const ServicesSection: React.FC = () => {
       id="services"
       className="relative w-full py-28 md:py-36 bg-transparent flex flex-col items-center px-6 overflow-hidden"
     >
-      {/* Parallax floating orbs */}
-      <motion.div style={{ y: parallaxY }} className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 -right-40 w-[500px] h-[500px] rounded-full blur-[100px]"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.025, 0.05, 0.025] }}
-          transition={{ duration: 7, repeat: Infinity }}
-          style={{ background: 'radial-gradient(circle, rgba(0,200,255,0.4) 0%, transparent 70%)' }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -left-32 w-[400px] h-[400px] rounded-full blur-[100px]"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.02, 0.045, 0.02] }}
-          transition={{ duration: 5, repeat: Infinity, delay: 2 }}
-          style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }}
-        />
-      </motion.div>
+      {/* Ambient background orbs (delegated to CSS and hidden on mobile) */}
+      <div className="bg-ambient-orb animate-orb-scale w-[500px] h-[500px] -right-40 top-1/4" style={{ background: 'radial-gradient(circle, rgba(0,200,255,0.4) 0%, transparent 70%)' }} />
+      <div className="bg-ambient-orb animate-orb-scale w-[400px] h-[400px] -left-32 bottom-1/4" style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }} />
 
       <div className="max-w-[1400px] w-full flex flex-col gap-20 relative z-10">
 
@@ -148,21 +138,17 @@ export const ServicesSection: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <motion.div
                       className="p-3 rounded-lg"
-                      style={{ background: `${service.color}12`, border: `1px solid ${service.color}25`, color: service.color }}
+                      style={{ background: `${service.color}12`, border: `1px solid ${service.color}25`, color: service.color, boxShadow: `0 0 10px ${service.color}15` }}
                       whileHover={{ scale: 1.15, rotate: 8, transition: { duration: 0.25 } }}
-                      animate={{ boxShadow: [`0 0 0px ${service.color}00`, `0 0 14px ${service.color}30`, `0 0 0px ${service.color}00`] }}
-                      transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
                     >
                       {service.icon}
                     </motion.div>
-                    <motion.span
+                    <span
                       className="font-space-grotesk text-[0.65rem] tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
                       style={{ background: `${service.color}12`, border: `1px solid ${service.color}28`, color: service.color }}
-                      animate={{ opacity: [0.7, 1, 0.7] }}
-                      transition={{ duration: 2.5, repeat: Infinity, delay: index * 0.3 }}
                     >
                       {service.tag}
-                    </motion.span>
+                    </span>
                   </div>
 
                   {/* Title */}

@@ -17,6 +17,10 @@ export const TiltCard: React.FC<TiltCardProps> = ({
     const card = cardRef.current;
     if (!card) return;
 
+    // Skip tilt mousemove listeners on touch devices to save CPU cycles
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;

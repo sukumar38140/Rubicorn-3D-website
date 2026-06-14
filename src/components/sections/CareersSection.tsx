@@ -62,21 +62,9 @@ export const CareersSection: React.FC = () => {
 
   return (
     <section id="careers" className="relative w-full py-28 md:py-36 bg-transparent flex flex-col items-center px-6 overflow-hidden">
-      {/* Background orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px]"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.025, 0.05, 0.025] }}
-          transition={{ duration: 7, repeat: Infinity }}
-          style={{ background: 'radial-gradient(circle, rgba(0,200,255,0.4) 0%, transparent 70%)' }}
-        />
-        <motion.div
-          className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[100px]"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.02, 0.04, 0.02] }}
-          transition={{ duration: 5, repeat: Infinity, delay: 2 }}
-          style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }}
-        />
-      </div>
+      {/* Ambient background orbs (delegated to CSS and hidden on mobile) */}
+      <div className="bg-ambient-orb animate-orb-scale w-[500px] h-[500px] -right-40 bottom-0" style={{ background: 'radial-gradient(circle, rgba(0,200,255,0.4) 0%, transparent 70%)' }} />
+      <div className="bg-ambient-orb animate-orb-scale w-[400px] h-[400px] -left-32 top-0" style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }} />
 
       <div className="max-w-[1100px] w-full flex flex-col gap-20 relative z-10">
 
@@ -117,20 +105,12 @@ export const CareersSection: React.FC = () => {
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
                   style={{ background: 'radial-gradient(circle at center, rgba(0,200,255,0.07) 0%, transparent 70%)' }}
                 />
-                <motion.span
-                  className="text-[#00C8FF] relative"
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.5 }}
-                >
+                <span className="text-[#00C8FF] relative">
                   {item.icon}
-                </motion.span>
-                <motion.div
-                  className="font-orbitron font-extrabold text-[1.6rem] md:text-[2rem] text-white relative"
-                  animate={{ textShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 15px rgba(0,200,255,0.35)', '0 0 0px rgba(0,200,255,0)'] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.6 }}
-                >
+                </span>
+                <div className="font-orbitron font-extrabold text-[1.6rem] md:text-[2rem] text-white relative">
                   {item.value}
-                </motion.div>
+                </div>
                 <div className="font-space-grotesk text-[0.65rem] tracking-[0.2em] text-white/40 uppercase relative">{item.label}</div>
               </motion.div>
             </ContentEmergence>
@@ -143,13 +123,9 @@ export const CareersSection: React.FC = () => {
             className="rounded-2xl border border-[#00C8FF]/18 p-8 md:p-10"
             style={{ background: 'rgba(3, 10, 24, 0.52)', backdropFilter: 'blur(12px)' }}
           >
-            <motion.span
-              className="font-space-grotesk text-[0.65rem] tracking-[0.3em] text-[#00C8FF] uppercase"
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
+            <span className="font-space-grotesk text-[0.65rem] tracking-[0.3em] text-[#00C8FF] uppercase">
               INTERNSHIP BENEFITS
-            </motion.span>
+            </span>
             <h3 className="font-orbitron font-bold text-[1.2rem] md:text-[1.5rem] text-white mt-2 mb-8 uppercase">What You Gain</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {perks.map((perk, i) => (
@@ -159,13 +135,9 @@ export const CareersSection: React.FC = () => {
                     style={{ background: 'rgba(3, 10, 24, 0.52)' }}
                     whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.25 } }}
                   >
-                    <motion.span
-                      className="text-[1.4rem] mt-0.5"
-                      animate={{ rotate: [0, 8, -5, 0], scale: [1, 1.1, 1] }}
-                      transition={{ duration: 3, repeat: Infinity, delay: i * 0.45 }}
-                    >
+                    <span className="text-[1.4rem] mt-0.5">
                       {perk.icon}
-                    </motion.span>
+                    </span>
                     <div>
                       <div className="font-orbitron font-bold text-[0.85rem] text-white uppercase mb-1">{perk.title}</div>
                       <div className="text-white/45 text-[0.78rem] leading-relaxed">{perk.desc}</div>
@@ -182,13 +154,9 @@ export const CareersSection: React.FC = () => {
           <ContentEmergence intensity="secondary" delay={180}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-orbitron font-bold text-[1.1rem] text-white uppercase tracking-wide">Open Positions</h3>
-              <motion.span
-                className="font-space-grotesk text-[0.7rem] tracking-[0.2em] text-[#00C8FF] bg-[#00C8FF]/10 border border-[#00C8FF]/20 px-3 py-1 rounded-full uppercase"
-                animate={{ boxShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 10px rgba(0,200,255,0.2)', '0 0 0px rgba(0,200,255,0)'] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              >
+              <span className="font-space-grotesk text-[0.7rem] tracking-[0.2em] text-[#00C8FF] bg-[#00C8FF]/10 border border-[#00C8FF]/20 px-3 py-1 rounded-full uppercase">
                 {jobs.length} Open Roles
-              </motion.span>
+              </span>
             </div>
           </ContentEmergence>
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { ContentEmergence } from '../ui/ContentEmergence';
+import { useFrameSequence } from '../../contexts/FrameSequenceProvider';
 
 interface Review {
   name: string;
@@ -14,12 +15,13 @@ interface Review {
 }
 
 export const TestimonialsSection: React.FC = () => {
+  const { isMobile } = useFrameSequence();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const parallaxBg = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const parallaxBg = useTransform(scrollYProgress, [0, 1], isMobile ? ['0%', '0%'] : ['0%', '10%']);
 
   const reviews: Review[] = [
     {
@@ -75,15 +77,11 @@ export const TestimonialsSection: React.FC = () => {
       id="testimonials"
       className="relative w-full py-28 md:py-36 bg-transparent flex flex-col items-center px-6 overflow-hidden"
     >
-      {/* Animated background orb */}
-      <motion.div style={{ y: parallaxBg }} className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[160px]"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.02, 0.045, 0.02] }}
-          transition={{ duration: 8, repeat: Infinity }}
-          style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }}
-        />
-      </motion.div>
+      {/* Ambient background orb (delegated to CSS and hidden on mobile) */}
+      <div
+        className="bg-ambient-orb bg-ambient-orb-large animate-orb-float w-[800px] h-[800px] left-1/2 top-1/2"
+        style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.5) 0%, transparent 70%)' }}
+      />
 
       <div className="max-w-[1200px] w-full flex flex-col gap-16 md:gap-20 relative z-10">
 
@@ -155,14 +153,12 @@ export const TestimonialsSection: React.FC = () => {
 
                     {/* Author */}
                     <div className="flex items-center gap-4 pt-2">
-                      <motion.div
-                        className="w-12 h-12 rounded-full border border-[#00C8FF]/25 flex items-center justify-center font-orbitron font-bold text-[#00C8FF] text-[0.9rem] shrink-0"
+                      <div
+                        className="w-12 h-12 rounded-full border border-[#00C8FF]/25 flex items-center justify-center font-orbitron font-bold text-[#00C8FF] text-[0.9rem] shrink-0 shadow-[0_0_10px_rgba(0,200,255,0.15)]"
                         style={{ background: 'linear-gradient(135deg, rgba(0,200,255,0.15), rgba(0,85,255,0.15))' }}
-                        animate={{ boxShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 15px rgba(0,200,255,0.3)', '0 0 0px rgba(0,200,255,0)'] }}
-                        transition={{ duration: 3, repeat: Infinity }}
                       >
                         {active.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                      </motion.div>
+                      </div>
                       <div>
                         <div className="font-orbitron font-semibold text-[0.92rem] text-white uppercase tracking-wide">{active.name}</div>
                         <div className="text-[#00C8FF] text-[0.74rem] font-space-grotesk tracking-wider uppercase mt-0.5">{active.role}</div>
@@ -172,23 +168,17 @@ export const TestimonialsSection: React.FC = () => {
                   </div>
 
                   {/* Result Callout */}
-                  <motion.div
-                    className="flex flex-col items-center justify-center p-6 md:p-8 rounded-xl border border-[#00C8FF]/20 min-w-[160px] text-center"
+                  <div
+                    className="flex flex-col items-center justify-center p-6 md:p-8 rounded-xl border border-[#00C8FF]/20 min-w-[160px] text-center shadow-[0_0_15px_rgba(0,200,255,0.08)]"
                     style={{ background: 'rgba(0,200,255,0.04)' }}
-                    animate={{ boxShadow: ['0 0 0px rgba(0,200,255,0)', '0 0 20px rgba(0,200,255,0.12)', '0 0 0px rgba(0,200,255,0)'] }}
-                    transition={{ duration: 3.5, repeat: Infinity }}
                   >
-                    <motion.div
-                      className="font-orbitron font-extrabold text-[2.5rem] md:text-[3rem] bg-clip-text text-transparent bg-gradient-to-b from-[#00C8FF] to-white leading-none"
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
+                    <div className="font-orbitron font-extrabold text-[2.5rem] md:text-[3rem] bg-clip-text text-transparent bg-gradient-to-b from-[#00C8FF] to-white leading-none">
                       {active.result}
-                    </motion.div>
+                    </div>
                     <div className="font-space-grotesk text-[0.68rem] tracking-[0.15em] text-white/40 uppercase mt-2 max-w-[120px]">
                       {active.resultLabel}
                     </div>
-                  </motion.div>
+                    </div>
                 </motion.div>
               </AnimatePresence>
 
@@ -241,9 +231,9 @@ export const TestimonialsSection: React.FC = () => {
                 {/* Stars */}
                 <div className="flex gap-0.5 mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <motion.span key={i} animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, delay: i * 0.15, repeat: Infinity, repeatDelay: 3 }}>
+                    <span key={i}>
                       <Star size={11} className="fill-[#00C8FF] text-[#00C8FF]" />
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
                 <p className="text-white/55 text-[0.8rem] leading-relaxed line-clamp-3 italic mb-4">"{rev.content}"</p>

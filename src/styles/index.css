@@ -225,3 +225,84 @@
 .animate-border-glow {
   animation: borderGlow 4s infinite ease-in-out;
 }
+
+/* GPU-Accelerated Background Ambient Orbs */
+.bg-ambient-orb {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(100px);
+  -webkit-filter: blur(100px);
+  will-change: transform, opacity;
+  z-index: 0;
+}
+
+.bg-ambient-orb-large {
+  filter: blur(160px);
+  -webkit-filter: blur(160px);
+}
+
+/* Centered float animation */
+@keyframes floatOrb {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0.025;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.12) rotate(180deg);
+    opacity: 0.05;
+  }
+}
+
+.animate-orb-float {
+  animation: floatOrb 14s infinite ease-in-out;
+}
+
+/* Side/corner scale float animation */
+@keyframes scaleOrb {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.02;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.04;
+  }
+}
+
+.animate-orb-scale {
+  animation: scaleOrb 9s infinite ease-in-out;
+}
+
+/* Mobile optimization: hide CPU-heavy blurred orbs completely */
+@media (max-w: 768px) {
+  .bg-ambient-orb {
+    display: none !important;
+  }
+}
+
+/* CSS GPU-Accelerated Shimmer Sweep on Hover */
+@keyframes shimmerSweep {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -180% 0;
+  }
+}
+
+.shimmer-hover-effect {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(0, 200, 255, 0.07) 50%, transparent 70%);
+  background-size: 200% 100%;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.group:hover .shimmer-hover-effect {
+  opacity: 1;
+  animation: shimmerSweep 1.8s infinite linear;
+}

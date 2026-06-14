@@ -60,41 +60,43 @@ export const FrameBackground: React.FC = () => {
       (e) => e.phase !== 'idle'
     );
 
-    // 1. Draw Portal Glows behind/around emerging components
-    activeEmergences.forEach((e) => {
-      let radius = e.width * 0.75;
-      let alpha = 0.22 * e.intensity;
+    // 1. Draw Portal Glows behind/around emerging components (skipped on mobile for scroll performance)
+    if (!isMobile) {
+      activeEmergences.forEach((e) => {
+        let radius = e.width * 0.75;
+        let alpha = 0.22 * e.intensity;
 
-      if (e.phase === 'presence') {
-        radius = e.width * 0.45 * (0.5 + e.progress * 0.5);
-        alpha = 0.12 * e.intensity * e.progress;
-      } else if (e.phase === 'acceleration') {
-        radius = e.width * (0.45 + e.progress * 0.3);
-        alpha = (0.12 + e.progress * 0.1) * e.intensity;
-      } else if (e.phase === 'travel') {
-        radius = e.width * (0.75 + Math.sin(now * 0.008) * 0.04);
-        alpha = 0.26 * e.intensity;
-      } else if (e.phase === 'arrival') {
-        radius = e.width * (0.75 + (1 - e.progress) * 0.08);
-        alpha = 0.26 * (1 - e.progress) * e.intensity;
-      } else if (e.phase === 'settlement') {
-        radius = e.width * 0.75;
-        alpha = 0.08 * (1 - e.progress) * e.intensity;
-      }
+        if (e.phase === 'presence') {
+          radius = e.width * 0.45 * (0.5 + e.progress * 0.5);
+          alpha = 0.12 * e.intensity * e.progress;
+        } else if (e.phase === 'acceleration') {
+          radius = e.width * (0.45 + e.progress * 0.3);
+          alpha = (0.12 + e.progress * 0.1) * e.intensity;
+        } else if (e.phase === 'travel') {
+          radius = e.width * (0.75 + Math.sin(now * 0.008) * 0.04);
+          alpha = 0.26 * e.intensity;
+        } else if (e.phase === 'arrival') {
+          radius = e.width * (0.75 + (1 - e.progress) * 0.08);
+          alpha = 0.26 * (1 - e.progress) * e.intensity;
+        } else if (e.phase === 'settlement') {
+          radius = e.width * 0.75;
+          alpha = 0.08 * (1 - e.progress) * e.intensity;
+        }
 
-      // Safeguard: radial gradient throws index size error if radius is <= 0 or NaN. Also prevent alpha NaNs.
-      if (isNaN(radius) || radius <= 0.001 || isNaN(alpha) || alpha <= 0 || isNaN(e.x) || isNaN(e.y)) return;
+        // Safeguard: radial gradient throws index size error if radius is <= 0 or NaN. Also prevent alpha NaNs.
+        if (isNaN(radius) || radius <= 0.001 || isNaN(alpha) || alpha <= 0 || isNaN(e.x) || isNaN(e.y)) return;
 
-      const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, radius);
-      grad.addColorStop(0, `rgba(0, 200, 255, ${alpha})`);
-      grad.addColorStop(0.45, `rgba(0, 85, 255, ${alpha * 0.45})`);
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, radius);
+        grad.addColorStop(0, `rgba(0, 200, 255, ${alpha})`);
+        grad.addColorStop(0.45, `rgba(0, 85, 255, ${alpha * 0.45})`);
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(e.x, e.y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    });
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
 
     // 2. Update and Draw Particles
     const particles = particlesRef.current;
@@ -174,32 +176,36 @@ export const FrameBackground: React.FC = () => {
       }
     });
 
-    // 3. Draw energy wave pulses
-    pulsesRef.current = pulsesRef.current.filter((p) => {
-      const elapsed = now - p.startTime;
-      const progress = elapsed / p.duration;
+    // 3. Draw energy wave pulses (skipped on mobile)
+    if (!isMobile) {
+      pulsesRef.current = pulsesRef.current.filter((p) => {
+        const elapsed = now - p.startTime;
+        const progress = elapsed / p.duration;
 
-      if (progress >= 1) return false;
+        if (progress >= 1) return false;
 
-      const radius = progress * 240;
-      const alpha = (1 - progress) * 0.32;
+        const radius = progress * 240;
+        const alpha = (1 - progress) * 0.32;
 
-      // Safeguard: prevent drawing if invalid values exist
-      if (isNaN(radius) || radius <= 0.001 || isNaN(p.x) || isNaN(p.y) || isNaN(alpha) || alpha <= 0) return true;
+        // Safeguard: prevent drawing if invalid values exist
+        if (isNaN(radius) || radius <= 0.001 || isNaN(p.x) || isNaN(p.y) || isNaN(alpha) || alpha <= 0) return true;
 
-      ctx.strokeStyle = p.color;
-      ctx.lineWidth = 2.2 * (1 - progress);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-      ctx.stroke();
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 2.2 * (1 - progress);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
 
-      ctx.fillStyle = `rgba(0, 200, 255, ${alpha * 0.08})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = `rgba(0, 200, 255, ${alpha * 0.08})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        ctx.fill();
 
-      return true;
-    });
+        return true;
+      });
+    } else {
+      pulsesRef.current = [];
+    }
   };
 
   // Drawing method executing object-fit cover scale logic

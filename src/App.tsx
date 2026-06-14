@@ -8,12 +8,12 @@ import { FramePreloader } from './components/background/FramePreloader';
 import { Header } from './components/layout/Header';
 import { ScrollToTop } from './components/layout/ScrollToTop';
 
-import { Home } from './pages/Home';
-import { WhyRubicornPage } from './pages/WhyRubicornPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { TestimonialsPage } from './pages/TestimonialsPage';
-import { CareersPage } from './pages/CareersPage';
-import { ContactPage } from './pages/ContactPage';
+const Home = React.lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const WhyRubicornPage = React.lazy(() => import('./pages/WhyRubicornPage').then(m => ({ default: m.WhyRubicornPage })));
+const ServicesPage = React.lazy(() => import('./pages/ServicesPage').then(m => ({ default: m.ServicesPage })));
+const TestimonialsPage = React.lazy(() => import('./pages/TestimonialsPage').then(m => ({ default: m.TestimonialsPage })));
+const CareersPage = React.lazy(() => import('./pages/CareersPage').then(m => ({ default: m.CareersPage })));
+const ContactPage = React.lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
 
 export const App: React.FC = () => {
   const location = useLocation();
@@ -38,17 +38,19 @@ export const App: React.FC = () => {
             style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
           >
             <AnimatePresence mode="wait">
-              <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<Home />} />
-                <Route path="/why-rubicorn" element={<WhyRubicornPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/testimonials" element={<TestimonialsPage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                
-                {/* Wildcard redirect to main landing fold */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
+              <React.Suspense fallback={null}>
+                <Routes location={location} key={location.pathname}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/why-rubicorn" element={<WhyRubicornPage />} />
+                  <Route path="/services" element={<ServicesPage />} />
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  
+                  {/* Wildcard redirect to main landing fold */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </React.Suspense>
             </AnimatePresence>
           </main>
         </div>
