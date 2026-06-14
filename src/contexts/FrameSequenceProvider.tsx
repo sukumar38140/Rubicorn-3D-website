@@ -58,8 +58,8 @@ export const FrameSequenceProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(false);
   };
 
-  // Preloading parameters (Wait for first 5 frames to load before releasing preloader for instant entry)
-  const initialPreloadCount = Math.min(5, totalFrames);
+  // Preloading parameters (Wait for first 1 frame to load before releasing preloader for instant entry)
+  const initialPreloadCount = Math.min(1, totalFrames);
 
   useEffect(() => {
     let active = true;
@@ -146,8 +146,8 @@ export const FrameSequenceProvider: React.FC<{ children: React.ReactNode }> = ({
       };
     };
 
-    // Spin up 4 parallel loading connections
-    const pipelines = 4;
+    // Spin up 8 parallel loading connections
+    const pipelines = 8;
     for (let p = 0; p < pipelines; p++) {
       loadNext();
     }

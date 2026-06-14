@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ContentEmergence } from '../ui/ContentEmergence';
+import { useFrameSequence } from '../../contexts/FrameSequenceProvider';
 
 export const HeroSection: React.FC = () => {
+  const { isLoading } = useFrameSequence();
   const desktopVideo = '/assets/desktop/Rubicorn Landing page desktop.mp4';
   const mobileVideo = '/assets/mobile/Rubicorn Mobile size landing page.mp4';
 
@@ -64,17 +66,19 @@ export const HeroSection: React.FC = () => {
         className="absolute top-0 left-0 w-full h-full pointer-events-none transition-opacity duration-75"
         style={{ opacity: videoOpacity }}
       >
-        <video
-          ref={videoRef}
-          key={isMobile ? 'mobile-video' : 'desktop-video'}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source src={isMobile ? mobileVideo : desktopVideo} type="video/mp4" />
-        </video>
+        {!isLoading && (
+          <video
+            ref={videoRef}
+            key={isMobile ? 'mobile-video' : 'desktop-video'}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={isMobile ? mobileVideo : desktopVideo} type="video/mp4" />
+          </video>
+        )}
         {/* Completely transparent overlay to keep video at maximum brightness */}
         <div className="absolute top-0 left-0 w-full h-full bg-transparent" />
       </div>
